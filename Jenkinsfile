@@ -29,7 +29,7 @@ pipeline {
       openshift.newBuild("--name=otherbuild", "--docker-image=registry.redhat.io/jboss-eap-7/eap74-openjdk8-openshift-rhel7", "--binary") 
     } 
     
-    openshift.selector("bc", "otherbuild").startBuild("--from-file=target/demo7-1.0-SNAPSHOT.war", "--follow") } }
+    openshift.selector("bc", "otherbuild").startBuild("--from-file=target/demo7-1.0-SNAPSHOT.jar", "--follow") } }
 
         }
       }
