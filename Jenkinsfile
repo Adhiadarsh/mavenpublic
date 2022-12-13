@@ -23,13 +23,13 @@ pipeline {
           openshift.withCluster() { 
   openshift.withProject("cicdjenkins") {
   
-    def buildConfigExists = openshift.selector("bc", "otherbuild").exists() 
+    def buildConfigExists = openshift.selector("bc", "jarbuild").exists() 
     
     if(!buildConfigExists){ 
-      openshift.newBuild("--name=otherbuild", "--docker-image=registry.redhat.io/redhat-openjdk-18/openjdk18-openshift", "--binary") 
+      openshift.newBuild("--name=jarbuild", "--docker-image=registry.redhat.io/redhat-openjdk-18/openjdk18-openshift", "--binary") 
     } 
     
-    openshift.selector("bc", "otherbuild").startBuild("--from-file=target/demo7-1.0-SNAPSHOT.jar", "--follow") } }
+    openshift.selector("bc", "jarbuild").startBuild("--from-file=target/demo7-1.0-SNAPSHOT.jar", "--follow") } }
 
         }
       }
@@ -41,14 +41,14 @@ pipeline {
 
           openshift.withCluster() { 
   openshift.withProject("cicdjenkins") { 
-    def deployment = openshift.selector("dc", "otherbuild") 
+    def deployment = openshift.selector("dc", "jarbuild") 
     
     if(!deployment.exists()){ 
-      openshift.newApp('otherbuild', "--as-deployment-config").narrow('svc').expose() 
+      openshift.newApp('jarbuild', "--as-deployment-config").narrow('svc').expose() 
     } 
     
     timeout(5) { 
-      openshift.selector("dc", "otherbuild").related('pods').untilEach(1) { 
+      openshift.selector("dc", "jarbuild").related('pods').untilEach(1) { 
         return (it.object().status.phase == "Running") 
       } 
     } 
