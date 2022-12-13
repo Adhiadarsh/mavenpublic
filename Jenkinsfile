@@ -40,7 +40,7 @@ pipeline {
         script {
 
           openshift.withCluster() { 
-  openshift.withProject("otherjenkins") { 
+  openshift.withProject("cicdjenkins") { 
     def deployment = openshift.selector("dc", "otherbuild") 
     
     if(!deployment.exists()){ 
